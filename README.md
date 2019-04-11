@@ -1,9 +1,9 @@
-# An introduction to using Quartz with Spring boot and MongoDB
-
-This project depicts how you can use the Quartz library using Spring boot and MongoDB.
-
-In this project, we are using a custom JobStore class in order to customize the way we get the MongoDB details based on spring profiles.
-
-## GitHub Repository for the Quarts MongoDB implementation
-
-- [michaelklishin](https://github.com/michaelklishin/quartz-mongodb.git)
+1.Run mvn package -DskipTests
+2.run sh test.sh 
+3.Wait for 10 - 15 mins
+4.Kill process with ps -ef|grep quartz |grep node1
+5.wait for 3-4 mins
+6.Kill process with ps -ef|grep quartz|grep node2
+7.cat node* |grep 'sample job' |sort
+8.Verify above output to see that all 4 Sample jobs are getting triggered every minute across node1 and node2.
+ After killing node1 process,all jobs get scheduled via node2 

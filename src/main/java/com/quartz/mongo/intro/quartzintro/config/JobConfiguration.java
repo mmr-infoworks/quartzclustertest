@@ -2,6 +2,9 @@ package com.quartz.mongo.intro.quartzintro.config;
 
 import static org.quartz.TriggerBuilder.newTrigger;
 
+import com.quartz.mongo.intro.quartzintro.scheduler.jobs.SampleJob2;
+import com.quartz.mongo.intro.quartzintro.scheduler.jobs.SampleJob3;
+import com.quartz.mongo.intro.quartzintro.scheduler.jobs.SampleJob4;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -19,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import com.quartz.mongo.intro.quartzintro.constants.SchedulerConstants;
-import com.quartz.mongo.intro.quartzintro.scheduler.jobs.SampleJob;
+import com.quartz.mongo.intro.quartzintro.scheduler.jobs.SampleJob1;
 
 /**
  * 
@@ -36,10 +39,18 @@ public class JobConfiguration {
 
 	@PostConstruct
 	private void initialize() throws Exception {
-		schedulerFactoryBean.getScheduler().addJob(sampleJobDetail(), true, true);
-		if (!schedulerFactoryBean.getScheduler().checkExists(new TriggerKey(
-				SchedulerConstants.SAMPLE_JOB_POLLING_TRIGGER_KEY, SchedulerConstants.SAMPLE_JOB_POLLING_GROUP))) {
-			schedulerFactoryBean.getScheduler().scheduleJob(sampleJobTrigger());
+		try {
+			Class[] jobClasses = {SampleJob1.class, SampleJob2.class, SampleJob3.class, SampleJob4.class};
+			for (int i = 0; i < jobClasses.length; i++) {
+				Class jobClass = jobClasses[i];
+				schedulerFactoryBean.getScheduler().addJob(sampleJobDetail(jobClass), true, true);
+				if (!schedulerFactoryBean.getScheduler().checkExists(new TriggerKey(
+						"job-" + jobClass.getCanonicalName(), "group-"))) {
+					schedulerFactoryBean.getScheduler().scheduleJob(sampleJobTrigger(jobClass));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
@@ -48,16 +59,16 @@ public class JobConfiguration {
 	 * <p>
 	 * The job is configured here where we provide the job class to be run on
 	 * each invocation. We give the job a name and a value so that we can
-	 * provide the trigger to it on our method {@link #sampleJobTrigger()}
+	 * provide the trigger to it on our method {@link #sampleJobTrigger(Class)}
 	 * </p>
 	 * 
 	 * @return an instance of {@link JobDetail}
 	 */
-	private static JobDetail sampleJobDetail() {
+	private static JobDetail sampleJobDetail(Class cls) {
 		JobDetailImpl jobDetail = new JobDetailImpl();
 		jobDetail.setKey(
-				new JobKey(SchedulerConstants.SAMPLE_JOB_POLLING_JOB_KEY, SchedulerConstants.SAMPLE_JOB_POLLING_GROUP));
-		jobDetail.setJobClass(SampleJob.class);
+				new JobKey(getJobKey(cls), getJobGroup(cls)));
+		jobDetail.setJobClass(cls);
 		jobDetail.setDurability(true);
 		return jobDetail;
 	}
@@ -71,13 +82,20 @@ public class JobConfiguration {
 	 * 
 	 * @return an instance of {@link Trigger}
 	 */
-	private static Trigger sampleJobTrigger() {
-		return newTrigger().forJob(sampleJobDetail())
-				.withIdentity(SchedulerConstants.SAMPLE_JOB_POLLING_TRIGGER_KEY,
-						SchedulerConstants.SAMPLE_JOB_POLLING_GROUP)
+	private static Trigger sampleJobTrigger(Class cls) {
+		return newTrigger().forJob(sampleJobDetail(cls))
+				.withIdentity(getJobKey(cls) ,
+						getJobGroup(cls))
 				.withPriority(50).withSchedule(SimpleScheduleBuilder.repeatMinutelyForever())
 				.startAt(Date.from(LocalDateTime.now().plusSeconds(3).atZone(ZoneId.systemDefault()).toInstant()))
 				.build();
 	}
 
+	private static String getJobKey(Class cls) {
+		return "job-" +cls.getSimpleName();
+	}
+
+	private static String getJobGroup(Class cls) {
+		return "group-" +cls.getSimpleName();
+	}
 }
