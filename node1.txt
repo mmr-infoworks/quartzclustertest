@@ -209,3 +209,10 @@
 2019-04-12 10:16:51.924  INFO 64646 --- [SchedulerThread] c.n.quartz.mongodb.TriggerRunner         : Acquired trigger: group-SampleJob1.job-SampleJob1
 2019-04-12 10:16:53.388  INFO 64646 --- [pool-1-thread-1] c.n.quartz.mongodb.cluster.CheckinTask   : Node schedulerFactoryBean:Manohars-MacBook-Pro.local1555043004507 checks-in.
 2019-04-12 10:17:00.887  INFO 64646 --- [pool-1-thread-1] c.n.quartz.mongodb.cluster.CheckinTask   : Node schedulerFactoryBean:Manohars-MacBook-Pro.local1555043004507 checks-in.
+2019-04-12 10:17:08.386  INFO 64646 --- [pool-1-thread-1] c.n.quartz.mongodb.cluster.CheckinTask   : Node schedulerFactoryBean:Manohars-MacBook-Pro.local1555043004507 checks-in.
+2019-04-12 10:17:13.725  INFO 64646 --- [ryBean_Worker-1] c.q.m.i.q.scheduler.jobs.SampleJob1      : This is the sample job 1, executed by node1 
+2019-04-12 10:17:13.745  INFO 64646 --- [ryBean_Worker-1] c.n.quartz.mongodb.dao.LocksDao          : Removing trigger lock group-SampleJob1.job-SampleJob1.Manohars-MacBook-Pro.local1555043004507
+2019-04-12 10:17:13.746  INFO 64646 --- [ryBean_Worker-1] c.n.quartz.mongodb.dao.LocksDao          : Trigger lock group-SampleJob1.job-SampleJob1.Manohars-MacBook-Pro.local1555043004507 removed.
+2019-04-12 10:17:13.746  INFO 64646 --- [SchedulerThread] c.n.quartz.mongodb.dao.TriggerDao        : Found 0 triggers which are eligible to be run.
+2019-04-12 10:17:15.884  INFO 64646 --- [pool-1-thread-1] c.n.quartz.mongodb.cluster.CheckinTask   : Node schedulerFactoryBean:Manohars-MacBook-Pro.local1555043004507 checks-in.
+2019-04-12 10:17:23.385  INFO 64646 --- [pool-1-thread-1] c.n.quartz.mongodb.cluster.CheckinTask   : Node schedulerFactoryBean:Manohars-MacBook-Pro.local1555043004507 checks-in.

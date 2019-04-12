@@ -1,3 +1,4 @@
+0.Change your system timezone to UTC
 1.Run mvn package -DskipTests
 2.run sh test.sh 
 3.Wait for 10 - 15 mins
