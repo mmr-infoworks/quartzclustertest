@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.quartz.JobDetail;
@@ -98,4 +99,5 @@ public class JobConfiguration {
 	private static String getJobGroup(Class cls) {
 		return "group-" +cls.getSimpleName();
 	}
+
 }
